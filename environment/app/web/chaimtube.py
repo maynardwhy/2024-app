@@ -16,17 +16,14 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(128)                                              # CSRF protection
 session_id = None
 
-limiter = Limiter(                                                                      # Brute force protection
-    app,
-    key_func=get_remote_address
-)
+limiter = Limiter(get_remote_address, app=app)
 
 def db_connect():    
     check = 1
     while check == 1:
         try:
             check = 0
-            db = pymysql.connect(host='chaimtube_db', user='root', passwd='pass', db='chaimtube', autocommit=True)
+            db = pymysql.connect(host='chaimtube_db', user='root', passwd='changeme', db='chaimtube', autocommit=True)
         except pymysql.err.OperationalError:
             check = 1
 
@@ -330,16 +327,6 @@ def adduser():
     cmd = subprocess.Popen(command,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
     out,error = cmd.communicate()
     return str(out.decode()) + str(error.decode())
-
-
-@app.after_request
-def apply_caching(response):
-    response.headers["X-Frame-Options"] = "SAMEORIGIN"
-    response.headers["server"] = 'Simple-Web-Server'
-    response.headers['X-Content-Type-Options'] = 'nosniff'
-    response.headers['Content-Security-Policy'] = "default-src 'self'"
-
-    
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0')
