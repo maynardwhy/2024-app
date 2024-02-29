@@ -35,7 +35,7 @@ jobs:
       - name: Pyraider
         run: |
           pip install pyraider
-          pyraider check -f Environment/app/web/requirements.txt > logs/result-pyraider.txt
+          pyraider check -f environment/app/web/requirements.txt > logs/result-pyraider.txt
           
       - uses: actions/upload-artifact@v2
         with:
