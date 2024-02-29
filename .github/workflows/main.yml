@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v2
       
       - name: Build docker-compose
-        run: docker-compose -f ./Environment/App/docker-compose.yml up --build -d
+        run: docker-compose -f ./environment/app/docker-compose.yml up --build -d
                 
   sca:
     runs-on: ubuntu-latest
@@ -25,7 +25,7 @@ jobs:
       - name: Safety
         run: |
          pip install safety
-         safety check -r Environment/App/app/flask/requirements.txt > logs/result-safety.txt
+         safety check -r environment/app/web/requirements.txt > logs/result-safety.txt
       - uses: actions/upload-artifact@v2
         with:
           name: logs
@@ -35,7 +35,7 @@ jobs:
       - name: Pyraider
         run: |
           pip install pyraider
-          pyraider check -f Environment/App/app/flask/requirements.txt > logs/result-pyraider.txt
+          pyraider check -f Environment/app/webrequirements.txt > logs/result-pyraider.txt
           
       - uses: actions/upload-artifact@v2
         with:
